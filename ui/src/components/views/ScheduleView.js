@@ -1,13 +1,27 @@
-import React from 'react';
-import { Calendar } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Plus } from 'lucide-react';
+import CreateEventModal from '../CreateEventModal';
 
 function ScheduleView() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="view-container">
-      <div className="view-header">
-        <Calendar className="view-icon" size={32} />
-        <h2 className="view-title">Schedule</h2>
+      <div className="view-header" style={{ justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <Calendar className="view-icon" size={32} />
+          <h2 className="view-title">Schedule</h2>
+        </div>
+        <button 
+          className="join-button" 
+          style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={() => setIsModalOpen(true)}
+        >
+          <Plus size={20} />
+          Create a new Event
+        </button>
       </div>
+
       <div className="view-placeholder-card" style={{ 
         display: 'flex',
         justifyContent: 'center',
@@ -24,6 +38,11 @@ function ScheduleView() {
           title="Google Calendar"
         ></iframe>
       </div>
+
+      <CreateEventModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 }
