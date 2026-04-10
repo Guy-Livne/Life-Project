@@ -48,14 +48,14 @@ const CreateEventModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid || isSubmitting) return;
 
     setIsSubmitting(true);
     const { timeZone } = getTimezoneData();
 
     const payload = {
       summary: formData.summary,
-      ...(formData.description && { description: formData.description }),
+      description: formData.description || '',
       start: {
         dateTime: formatToISO8601WithOffset(formData.startTime),
         timeZone: timeZone,
@@ -66,24 +66,35 @@ const CreateEventModal = ({ isOpen, onClose }) => {
       },
     };
 
-    console.log('Submitting Event Payload:', payload);
-
-    // Mock API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // const response = await fetch('/api/events', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(payload),
-      // });
+      const response = await fetch('http://localhost:8000/create-event', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+
       setIsSuccess(true);
+      
+      // Brief delay to show success state before closing
       setTimeout(() => {
         setIsSuccess(false);
+        setFormData({
+          summary: '',
+          description: '',
+          startTime: '',
+          endTime: '',
+        });
         onClose();
-        setFormData({ summary: '', description: '', startTime: '', endTime: '' });
-      }, 2000);
+      }, 1500);
     } catch (error) {
       console.error('Failed to create event:', error);
+      alert('Error creating event. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

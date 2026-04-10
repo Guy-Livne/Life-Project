@@ -7,18 +7,27 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from fastapi import FastAPI
+from fastapi.params import Body
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"], # Allow your frontend
+    allow_credentials=True,
+    allow_methods=["*"], # This allows the OPTIONS preflight, POST, GET, etc.
+    allow_headers=["*"] # Allows the Content-Type header
+)
 
-
-def main():
-  """Shows basic usage of the Google Calendar API.
-  Prints the start and name of the next 10 events on the user's calendar.
-  """
+def authenticate():
   creds = None
-  # The file token.json stores the user's access and refresh tokens, and is
-  # created automatically when the authorization flow completes for the first
-  # time.
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
   if os.path.exists("token.json"):
     creds = Credentials.from_authorized_user_file("token.json", SCOPES)
   # If there are no (valid) credentials available, let the user log in.
@@ -33,38 +42,28 @@ def main():
     # Save the credentials for the next run
     with open("token.json", "w") as token:
       token.write(creds.to_json())
+  return creds
 
+
+@app.get("/")
+def read_root():
+  return {"Hello": "World"}
+
+@app.post("/create-event")
+def create_event(event: dict = Body(...)):
+  
   try:
+    creds = authenticate()
     service = build("calendar", "v3", credentials=creds)
-
-    # Call the Calendar API
-    now = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-    print("Getting the upcoming 10 events")
-    events_result = (
-        service.events()
-        .list(
-            calendarId="primary",
-            timeMin=now,
-            maxResults=10,
-            singleEvents=True,
-            orderBy="startTime",
-        )
-        .execute()
-    )
-    events = events_result.get("items", [])
-
-    if not events:
-      print("No upcoming events found.")
-      return
-
-    # Prints the start and name of the next 10 events
-    for event in events:
-      start = event["start"].get("dateTime", event["start"].get("date"))
-      print(start, event["summary"])
-
+    service.events().insert(calendarId='primary', body=event).execute()
+    return {"message": "Event created successfully!"}
+  
   except HttpError as error:
     print(f"An error occurred: {error}")
+    return {"error": str(error)}
 
+def main():
+  uvicorn.run(app, host="127.0.0.1", port=8000)
 
 if __name__ == "__main__":
   main()
