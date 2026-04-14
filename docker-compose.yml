@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  calendar-service:
+    build: ./calendar-service
+    ports:
+      - "8000:8000"
+    networks:
+      - life-network
+  ui-service:
+    build: ./ui
+    ports:
+      - "3000:3000"
+    networks:
+      - life-network
+networks:
+  life-network:
+    driver: bridge
