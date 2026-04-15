@@ -12,6 +12,18 @@ services:
       - "3000:3000"
     networks:
       - life-network
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+    networks:
+      - life-network
+volumes:
+  jenkins_home:
 networks:
   life-network:
     driver: bridge
