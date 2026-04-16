@@ -1,7 +1,6 @@
 #! /bin/bash
 BASE_DIRECTORY='/home/guy-livne/life-project/'
-CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep -Eo '^[^\/]+')
-
+CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep -Eo '^[^\/]+' | uniq)
 #Exports needed Environment variables for the build process
 set -a; export "${BASE_DIRECTORY}.env"; set +a
 
