@@ -8,6 +8,6 @@ pipeline {
                 sh './Jenkins/upload_image.sh'
                 echo 'Build stage completed.'
             }
-
+        }
     }
 }
