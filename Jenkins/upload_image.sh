@@ -2,7 +2,7 @@
 echo "Starting upload_image.sh script..."
 CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep -Eo '^[^\/]+' | uniq)
 #Exports needed Environment variables for the build process
-set -a; source ./.env ; set +a
+set -a; source "./.env" ; set +a
 
 # Run the build command for each changed service
 for SERVICE in $CHANGED_SERVICES; do
