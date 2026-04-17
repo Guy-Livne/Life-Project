@@ -11,7 +11,7 @@ for SERVICE in $CHANGED_SERVICES; do
     if [[ $(ls ${FULL_SERVICE_PATH} | grep -c "Dockerfile") -gt 0 ]]; then
         printf "Building and pushing image for service: %s\n" "$SERVICE"
         # Build the Docker image
-        docker build -t "${DOCKER_REGISTRY}:${SERVICE}-$(date '+%d.%m.%Y-%k:%M:%S')" "${FULL_SERVICE_PATH}"
+        docker build -t "${DOCKER_REGISTRY}:${SERVICE}-$(date '+%d.%m.%Y-%k:%M:%S')" "./${SERVICE}"
         # Push the Docker image
         docker login -u "guylivne1" -p "${DOCKER_REPO_PAT}"
         docker push "${DOCKER_REGISTRY}:${SERVICE}"
