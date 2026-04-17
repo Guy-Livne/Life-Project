@@ -1,8 +1,7 @@
 #! /bin/bash
 echo "Starting upload_image.sh script..."
 CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep -Eo '^[^\/]+' | uniq)
-#Exports needed Environment variables for the build process
-set -a; source "./.env" ; set +a
+#Environment variables are set by Jenkins (DOCKER_REGISTRY, DOCKER_REPO_PAT)
 
 # Run the build command for each changed service
 for SERVICE in $CHANGED_SERVICES; do
