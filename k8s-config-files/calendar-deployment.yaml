@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calendar-deployment
+  labels:
+    app: calendar
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: calendar
+  template:
+    metadata:
+      labels:
+        app: calendar
+    spec:
+      containers:
+      - name: calendar-service
+        image: guylivne1/life-project-images:calendar
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: life-image-registry-secret 
