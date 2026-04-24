@@ -46,6 +46,7 @@ def authenticate():
 
 
 @app.get("/")
+# This is just a test endpoint to verify that the service is running
 def read_root():
   return {"Hello": "World"}
 
