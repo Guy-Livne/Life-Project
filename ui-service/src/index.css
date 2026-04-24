@@ -1,0 +1,49 @@
+:root {
+  --bg-color: #05070a;
+  --surface-color: #0c0e14;
+  --primary-accent: linear-gradient(90deg, #00ff88, #00e676, #00c853);
+  --accent-glow: rgba(0, 255, 136, 0.4);
+  --text-primary: #ffffff;
+  --text-secondary: #b0b3b8;
+  --header-height: 70px;
+  --sidebar-collapsed-width: 80px;
+  --sidebar-expanded-width: 260px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+#root {
+  height: 100%;
+}
+
+/* Starfield/Particle Background Simulation */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100px 100px, 150px 150px, 200px 200px;
+  z-index: -1;
+  opacity: 0.6;
+}
