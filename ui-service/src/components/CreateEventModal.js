@@ -66,8 +66,11 @@ const CreateEventModal = ({ isOpen, onClose }) => {
       },
     };
 
+    const baseUrl = (process.env.REACT_APP_CALENDAR_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+    const url = `${baseUrl}/create-event`;
+
     try {
-      const response = await fetch('http://localhost:8000/create-event', {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
