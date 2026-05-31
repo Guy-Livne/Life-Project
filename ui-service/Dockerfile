@@ -10,6 +10,7 @@ RUN npm run build
 # STAGE 2: Serve with Nginx (Production)
 FROM nginx:1.25.4-alpine
 # We copy the static files from Stage 1 into the Nginx web folder
+COPY reverse_proxy.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

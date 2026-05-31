@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from fastapi.params import Body
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import os
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
@@ -24,7 +25,7 @@ TOKEN_FILE = os.path.join(SCRIPT_DIR, "token.json")
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], # Allow your frontend
+    allow_origins=[os.getenv("UI_URL")], # Allow your frontend
     allow_credentials=True,
     allow_methods=["*"], # This allows the OPTIONS preflight, POST, GET, etc.
     allow_headers=["*"] # Allows the Content-Type header
@@ -47,7 +48,10 @@ def authenticate():
       flow = InstalledAppFlow.from_client_secrets_file(
           CREDENTIALS_FILE, SCOPES
       )
-      creds = flow.run_local_server(port=8080)
+      creds = flow.run_local_server(
+        port=8080, 
+        prompt="consent", 
+        access_type="offline")
     # Save the credentials for the next run
     with open(TOKEN_FILE, "w") as token:
       token.write(creds.to_json())
