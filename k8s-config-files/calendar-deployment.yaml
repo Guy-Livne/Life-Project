@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: calendar-service
-        image: registry.gitlab.com/guy-livne/calendar-service:v1.0.0
+        image: registry.gitlab.com/guy-livne/calendar-service:v1.0.1
         ports:
         - containerPort: 3000
       imagePullSecrets:

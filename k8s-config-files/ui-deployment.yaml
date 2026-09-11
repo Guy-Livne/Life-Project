@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ui
-        image: registry.gitlab.com/guy-livne/ui-service:v1.0.0
+        image: registry.gitlab.com/guy-livne/ui-service:v1.0.2
         env:
         - name: REACT_APP_CALENDAR_API_URL
           valueFrom:
